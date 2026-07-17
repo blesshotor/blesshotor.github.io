@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bless Hotor — Data Assurance × Advanced Analytics × AI | Databricks Lakehouse · Fraud Intelligence</title>
+<meta name="description" content="Bless Hotor is an engineering leader in data assurance, advanced analytics, and AI — Databricks Lakehouse, ML models, and fraud intelligence. $21M+ protected. CISA. M.S. Data Analytics.">
+<style>
+  :root{
+    --bg:#07090f;
+    --bg2:#0b0f1a;
+    --card:#10162a;
+    --card2:#141b33;
+    --line:#1e2947;
+    --txt:#e8ecf7;
+    --muted:#8b96b8;
+    --accent:#39d3bb;
+    --accent2:#5b8cff;
+    --gold:#f5c15c;
+    --grad:linear-gradient(100deg,#39d3bb 0%,#5b8cff 55%,#a06bff 100%);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;overflow-x:hidden}
+  ::selection{background:rgba(57,211,187,.35)}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,9,15,.72);border-bottom:1px solid var(--line)}
+  .navin{max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-weight:800;font-size:1.05rem;letter-spacing:.4px}
+  .logo em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .navlinks{display:flex;gap:22px;font-size:.86rem}
+  .navlinks a{color:var(--muted);transition:color .2s}
+  .navlinks a:hover{color:var(--txt)}
+  .navcta{background:var(--grad);color:#04121a!important;font-weight:700;padding:7px 16px;border-radius:99px}
+  @media(max-width:760px){.navlinks a:not(.navcta){display:none}}
+
+  /* HERO */
+  header{position:relative;padding:150px 0 90px;background:
+    radial-gradient(900px 480px at 78% -8%,rgba(91,140,255,.16),transparent 60%),
+    radial-gradient(720px 420px at 12% 8%,rgba(57,211,187,.13),transparent 60%),
+    var(--bg)}
+  .kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:.78rem;color:var(--muted);letter-spacing:1.4px;text-transform:uppercase;margin-bottom:22px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  h1{font-size:clamp(2.4rem,5.6vw,4.1rem);line-height:1.06;font-weight:850;letter-spacing:-1px}
+  h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:22px;max-width:680px;font-size:1.12rem;color:var(--muted)}
+  .sub b{color:var(--txt)}
+  .heroctas{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:12px;font-weight:700;font-size:.95rem;transition:transform .15s, box-shadow .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-p{background:var(--grad);color:#04121a}
+  .btn-p:hover{box-shadow:0 8px 30px rgba(57,211,187,.3)}
+  .btn-o{border:1px solid var(--line);color:var(--txt);background:rgba(255,255,255,.02)}
+  .btn-o:hover{border-color:var(--accent)}
+
+  /* STATS */
+  .stats{margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:linear-gradient(160deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:22px 20px;position:relative;overflow:hidden}
+  .stat::after{content:"";position:absolute;inset:0;background:radial-gradient(220px 90px at 20% 0%,rgba(57,211,187,.09),transparent)}
+  .stat .n{font-size:2rem;font-weight:850;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:.82rem;color:var(--muted);margin-top:4px}
+
+  /* SECTIONS */
+  section{padding:88px 0;border-top:1px solid rgba(30,41,71,.5)}
+  .sec-k{font-size:.76rem;letter-spacing:2.4px;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:820;letter-spacing:-.5px;margin:10px 0 14px}
+  .lead{color:var(--muted);max-width:760px;font-size:1.04rem}
+
+  /* PILLARS */
+  .pillars{margin-top:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:860px){.pillars{grid-template-columns:1fr}}
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;transition:transform .2s,border-color .2s}
+  .pillar:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .pillar .ic{font-size:1.6rem}
+  .pillar h3{margin:12px 0 8px;font-size:1.12rem}
+  .pillar p{color:var(--muted);font-size:.92rem}
+
+  /* IMPACT */
+  .impact{margin-top:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:860px){.impact{grid-template-columns:1fr}}
+  .imp{background:linear-gradient(165deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;padding:26px}
+  .imp .big{font-size:1.9rem;font-weight:850;color:var(--gold)}
+  .imp h4{margin:6px 0 8px;font-size:1rem}
+  .imp p{color:var(--muted);font-size:.88rem}
+
+  /* PROJECTS */
+  .projs{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:860px){.projs{grid-template-columns:1fr}}
+  .proj{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;position:relative;transition:transform .2s,border-color .2s}
+  .proj:hover{transform:translateY(-4px);border-color:var(--accent2)}
+  .proj.flag{grid-column:1/-1;background:
+    radial-gradient(600px 220px at 90% -10%,rgba(160,107,255,.13),transparent 60%),
+    linear-gradient(160deg,var(--card2),var(--card))}
+  .tag{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;border-radius:99px;padding:4px 12px;margin-bottom:14px}
+  .tag.flagship{background:rgba(245,193,92,.14);color:var(--gold);border:1px solid rgba(245,193,92,.4)}
+  .tag.build{background:rgba(57,211,187,.12);color:var(--accent);border:1px solid rgba(57,211,187,.35)}
+  .tag.concept{background:rgba(91,140,255,.13);color:var(--accent2);border:1px solid rgba(91,140,255,.4)}
+  .proj h3{font-size:1.28rem;margin-bottom:10px}
+  .proj p{color:var(--muted);font-size:.94rem}
+  .proj .why{margin-top:14px;padding:12px 16px;border-left:3px solid var(--accent);background:rgba(57,211,187,.05);border-radius:0 10px 10px 0;font-size:.86rem;color:#b9c3de}
+  .proj .why b{color:var(--accent)}
+  .stack{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:.74rem;border:1px solid var(--line);border-radius:99px;padding:4px 12px;color:var(--muted)}
+
+  /* TIMELINE */
+  .tl{margin-top:44px;position:relative;padding-left:28px}
+  .tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--accent2),transparent)}
+  .tli{position:relative;margin-bottom:38px}
+  .tli::before{content:"";position:absolute;left:-26px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px rgba(57,211,187,.7)}
+  .tli .when{font-size:.78rem;color:var(--accent);font-weight:700;letter-spacing:1px}
+  .tli h3{font-size:1.1rem;margin:4px 0 2px}
+  .tli .org{color:var(--muted);font-size:.88rem;font-style:italic}
+  .tli p{color:var(--muted);font-size:.92rem;margin-top:8px;max-width:760px}
+
+  /* SKILLS */
+  .skills{margin-top:44px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:860px){.skills{grid-template-columns:1fr}}
+  .skill{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .skill h4{font-size:.92rem;color:var(--accent);margin-bottom:12px;letter-spacing:.6px;text-transform:uppercase}
+  .skill .chips{display:flex;flex-wrap:wrap;gap:8px}
+
+  /* WRITING */
+  .posts{margin-top:44px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:860px){.posts{grid-template-columns:1fr}}
+  .post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;transition:border-color .2s}
+  .post:hover{border-color:var(--gold)}
+  .post .soon{font-size:.7rem;color:var(--gold);letter-spacing:1.6px;text-transform:uppercase;font-weight:800}
+  .post h4{margin:10px 0 8px;font-size:1.02rem}
+  .post p{color:var(--muted);font-size:.86rem}
+
+  /* CREDS */
+  .creds{margin-top:44px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:860px){.creds{grid-template-columns:repeat(2,1fr)}}
+  .cred{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center}
+  .cred .t{font-weight:750;font-size:.95rem}
+  .cred .s{color:var(--muted);font-size:.8rem;margin-top:4px}
+
+  /* CONTACT */
+  .contact{background:
+    radial-gradient(700px 300px at 50% 0%,rgba(57,211,187,.1),transparent 60%),var(--bg2);
+    border:1px solid var(--line);border-radius:24px;padding:64px 40px;text-align:center;margin-top:20px}
+  .contact h2{margin-bottom:12px}
+  .contact p{color:var(--muted);max-width:560px;margin:0 auto 30px}
+  .socials{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  footer{padding:36px 0 48px;text-align:center;color:var(--muted);font-size:.8rem}
+  footer a{color:var(--muted)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.on{opacity:1;transform:none}
+
+  /* KNOWLEDGE MAP */
+  .mapbox{margin-top:44px;background:
+    radial-gradient(700px 320px at 50% 0%,rgba(91,140,255,.08),transparent 60%),
+    linear-gradient(170deg,#0a0e1c,#070a13);
+    border:1px solid var(--line);border-radius:22px;overflow:hidden;position:relative}
+  #kmap{display:block;width:100%;height:600px;cursor:grab;touch-action:none}
+  #kmap.dragging{cursor:grabbing}
+  .maphint{position:absolute;top:16px;right:18px;font-size:.72rem;color:var(--muted);background:rgba(7,9,15,.6);border:1px solid var(--line);border-radius:99px;padding:5px 14px;backdrop-filter:blur(6px)}
+  .maptip{position:absolute;pointer-events:none;background:rgba(10,14,28,.94);border:1px solid var(--accent);border-radius:10px;padding:8px 13px;font-size:.8rem;max-width:250px;opacity:0;transition:opacity .15s;z-index:5}
+  .maptip b{color:var(--accent)}
+  .maptip .g{display:block;font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 18px;padding:16px 22px;border-top:1px solid var(--line);background:rgba(7,9,15,.5)}
+  .lg{display:inline-flex;align-items:center;gap:7px;font-size:.76rem;color:var(--muted)}
+  .lg i{width:10px;height:10px;border-radius:50%;display:inline-block}
+  @media(max-width:760px){#kmap{height:440px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="navin">
+    <div class="logo">BLESS <em>HOTOR</em></div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#map">Knowledge Map</a>
+      <a href="#impact">Impact</a>
+      <a href="#projects">Projects</a>
+      <a href="#writing">Writing</a>
+      <a href="#experience">Experience</a>
+      <a class="navcta" href="#contact">Let's Talk</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="kicker"><span class="dot"></span> Data Assurance · Advanced Analytics · AI</span>
+    <h1>I make enterprise data<br><span class="grad">trustworthy, intelligent,<br>and fraud-proof.</span></h1>
+    <p class="sub">I'm <b>Bless Hotor</b> — an <b>AI expert developer</b> and engineering leader at the rare intersection of <b>data assurance</b>, <b>advanced analytics</b>, and <b>AI</b>. For 15+ years I've built Databricks Lakehouse platforms, ML models, and governed pipelines that decide whether billions in subscription, media, advertising, and card payment revenue are accurate, compliant, and safe — at SiriusXM, Pandora Media Ads, and across telecom, working hands-on with Chase Paymentech, Global Payments, and Worldpay.</p>
+    <div class="heroctas">
+      <a class="btn btn-p" href="#projects">See My Work →</a>
+      <a class="btn btn-o" href="https://www.linkedin.com/in/bless-hotor-bsc-cisa-069a1b29/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-o" href="https://github.com/blesshotor/blesshotor" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><div class="n" data-count="21" data-suffix="M+">$0</div><div class="l">Revenue protected & recovered</div></div>
+      <div class="stat reveal"><div class="n" data-count="81" data-suffix="/88">0</div><div class="l">Manual CFO processes automated</div></div>
+      <div class="stat reveal"><div class="n" data-count="6000" data-suffix="+">0</div><div class="l">Man-hours saved annually</div></div>
+      <div class="stat reveal"><div class="n" data-count="15" data-suffix="+ yrs">0</div><div class="l">Across media, fintech & telecom</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <span class="sec-k">The Thesis</span>
+    <h2>Every company runs on data.<br>Very few can prove theirs is right.</h2>
+    <p class="lead">Enterprise data flows through a maze of billing systems, payment processors, ad servers, and partner settlements. Errors leak money. Fraud drains it. Auditors question it. I've spent my career building the discipline of <b style="color:var(--txt)">Data Assurance Engineering</b> — Lakehouse platforms with controls, reconciliation, and machine intelligence built in, so every number is right <i>by construction</i>.</p>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <div class="ic">🏗️</div>
+        <h3>Lakehouse Data Engineering</h3>
+        <p>Vast Databricks experience — Delta Lake, Unity Catalog, Delta Live Tables, Apache Spark, and MLflow — plus Snowflake, BigQuery, Kafka streaming, and Airflow orchestration. Governed pipelines powering GL, AR, invoicing-to-billing, revenue recognition, and close, with SOX/ICFR controls embedded directly in the platform.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="ic">🕵️</div>
+        <h3>Payments, Fraud & Risk Intelligence</h3>
+        <p>Vast card-processing industry experience — end-to-end integrations with Chase Paymentech, Global Payments, and Worldpay, with deep understanding of card brand rules, interchange, and the chargeback lifecycle. Predictive ML models across card onboarding, chargebacks, and partner settlements: 34% fraud reduction, $11M prevented.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="ic">🤖</div>
+        <h3>AI Models & Advanced Analytics</h3>
+        <p>AI expert developer with deep experience across <b style="color:var(--txt)">LLMs, agent frameworks, RAG architectures, orchestration patterns, and AI application development</b>. I build and deploy enterprise AI solutions that deliver measurable outcomes — production ML forecasting within 1% tolerance, predictive fraud scoring, anomaly detection, and custom GPT copilots on the most regulated data a company owns. Equally at home coaching: I educate technical and non-technical audiences alike, from engineers to CFO-suite stakeholders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <span class="sec-k">The Knowledge Graph</span>
+    <h2>A 3D map of how it all connects</h2>
+    <p class="lead">Fifteen years of expertise isn't a list — it's a network. Drag to rotate, scroll to zoom, hover any node to trace its connections across data engineering, AI, payments, fraud, and compliance.</p>
+    <div class="mapbox reveal">
+      <canvas id="kmap"></canvas>
+      <div class="maphint">🖱 drag · scroll · hover</div>
+      <div class="maptip" id="maptip"></div>
+      <div class="legend">
+        <span class="lg"><i style="background:#39d3bb"></i> Core & Domains</span>
+        <span class="lg"><i style="background:#5b8cff"></i> Lakehouse & Data Engineering</span>
+        <span class="lg"><i style="background:#a06bff"></i> AI & Machine Learning</span>
+        <span class="lg"><i style="background:#f5c15c"></i> Payments & Card Industry</span>
+        <span class="lg"><i style="background:#ff6b8b"></i> Fraud & Risk</span>
+        <span class="lg"><i style="background:#6be0ff"></i> Finance Data</span>
+        <span class="lg"><i style="background:#9df58c"></i> Compliance & Governance</span>
+        <span class="lg"><i style="background:#ffa26b"></i> Leadership</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="wrap">
+    <span class="sec-k">Proof, Not Promises</span>
+    <h2>Measured impact</h2>
+    <div class="impact">
+      <div class="imp reveal"><div class="big">$4M+</div><h4>Annual savings — reconciliation models</h4><p>Billing & payment reconciliation models at SiriusXM that cut fraud exposure, write-offs, and chargebacks.</p></div>
+      <div class="imp reveal"><div class="big">$11M</div><h4>Fraud prevented during COVID-19</h4><p>Forecasted cash flow and partner metrics within 1% tolerance, catching partner device redemption fraud in-flight.</p></div>
+      <div class="imp reveal"><div class="big">34%</div><h4>Credit card onboarding fraud reduction</h4><p>Predictive models across payment processors — plus 60% reduction in write-offs year over year.</p></div>
+      <div class="imp reveal"><div class="big">$6M+</div><h4>Annual telecom savings</h4><p>Large-scale billing, interconnect, and payment reconciliations across Airtel, Afriwave, and Busy Internet.</p></div>
+      <div class="imp reveal"><div class="big">35% / 27%</div><h4>Chargebacks & processing fees cut</h4><p>Automated reconciliation and anomaly-detection models across billing, revenue, and payments.</p></div>
+      <div class="imp reveal"><div class="big">Zero</div><h4>Billing impact during platform migration</h4><p>Designed the control framework for migrating customers to a new billing platform — flawlessly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <span class="sec-k">Portfolio</span>
+    <h2>Signature projects</h2>
+    <p class="lead">Open-source and applied work that turns 15 years of revenue integrity practice into tools anyone can inspect, run, and learn from.</p>
+    <div class="projs">
+
+      <div class="proj flag reveal">
+        <span class="tag flagship">★ Flagship</span>
+        <h3>RevGuard — Open-Source Data Assurance Engine</h3>
+        <p>A production-grade Lakehouse framework that assures billing, payments, and revenue data end-to-end: ingest → validate → reconcile → detect anomalies → generate audit evidence. Ships with a synthetic subscription/ads billing dataset, Delta Live Tables pipelines with data quality expectations, Spark reconciliation jobs, and an ML anomaly-detection layer — the playbook behind $21M+ of real-world savings, as code.</p>
+        <div class="why"><b>Why it stands out:</b> nobody open-sources data assurance. This makes invisible expertise visible — every hiring manager in fintech, streaming, and ads finance can see exactly how you think.</div>
+        <div class="stack"><span class="chip">Databricks</span><span class="chip">Delta Live Tables</span><span class="chip">Apache Spark</span><span class="chip">Python</span><span class="chip">MLflow</span><span class="chip">Streamlit dashboard</span></div>
+      </div>
+
+      <div class="proj reveal">
+        <span class="tag build">Build next</span>
+        <h3>FraudLens AI — LLM Fraud Triage Copilot</h3>
+        <p>An AI copilot that ingests chargeback and transaction anomalies, classifies fraud patterns, explains each flag in plain English with citations to the underlying rules, and drafts the investigation memo. RAG over fraud typologies + rules engine.</p>
+        <div class="why"><b>Why it stands out:</b> proves "AI + fraud" isn't a buzzword on your resume — it's a working demo a recruiter can click.</div>
+        <div class="stack"><span class="chip">LLM / RAG</span><span class="chip">Python</span><span class="chip">LangChain</span><span class="chip">Vector DB</span></div>
+      </div>
+
+      <div class="proj reveal">
+        <span class="tag build">Build next</span>
+        <h3>SOX-as-Code — Compliance Controls Library</h3>
+        <p>An open library that expresses SOX/ICFR financial-data controls as executable pipeline checks — Delta Live Tables expectations, Unity Catalog governance policies, Great Expectations suites, and CI gates — covering completeness, cutoffs, three-way matches, and segregation-of-duties signals, with auto-generated audit evidence.</p>
+        <div class="why"><b>Why it stands out:</b> merges your CISA credential with engineering. "Compliance as code" is exactly what Netflix-scale ads finance teams are building internally.</div>
+        <div class="stack"><span class="chip">Unity Catalog</span><span class="chip">DLT expectations</span><span class="chip">Great Expectations</span><span class="chip">CI/CD</span><span class="chip">Audit evidence gen</span></div>
+      </div>
+
+      <div class="proj reveal">
+        <span class="tag concept">Case study</span>
+        <h3>Ads Revenue Recognition Simulator</h3>
+        <p>A miniature ads-finance pipeline: synthetic impressions → delivery validation → revenue recognition → invoicing → DSP report exchange. Interactive walkthrough of how streaming ads money actually flows, informed by building collectors reporting for Pandora Media Ads.</p>
+        <div class="why"><b>Why it stands out:</b> the exact domain of CTV ads-finance roles at Netflix, Roku, Disney, Amazon — displayed as a live demo.</div>
+        <div class="stack"><span class="chip">Python</span><span class="chip">Streamlit</span><span class="chip">ASC 606 logic</span><span class="chip">Ads metadata</span></div>
+      </div>
+
+      <div class="proj reveal">
+        <span class="tag concept">Case study</span>
+        <h3>The $21M Playbook — Anonymized War Stories</h3>
+        <p>Deep-dive written case studies of real saves: the 81/88 CFO automation program, the $11M COVID fraud catch, the zero-defect billing migration — architecture diagrams, control designs, and lessons, fully anonymized.</p>
+        <div class="why"><b>Why it stands out:</b> executives don't read repos — they read stories with numbers. This converts your track record into leadership evidence.</div>
+        <div class="stack"><span class="chip">Case studies</span><span class="chip">Architecture</span><span class="chip">Leadership</span></div>
+      </div>
+
+      <div class="proj reveal">
+        <span class="tag build">Build next</span>
+        <h3>SafeSynth — PCI-Safe Synthetic Finance Data</h3>
+        <p>A generator for realistic-but-fake billing, payments, and chargeback datasets (statistically faithful fraud patterns included) so teams can develop and demo finance analytics without touching regulated data.</p>
+        <div class="why"><b>Why it stands out:</b> solves a pain every regulated data team has; highly starrable utility that feeds all your other demos.</div>
+        <div class="stack"><span class="chip">Python</span><span class="chip">Faker / SDV</span><span class="chip">PCI awareness</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="writing">
+  <div class="wrap">
+    <span class="sec-k">Thought Leadership</span>
+    <h2>The Trust Layer — writing on revenue integrity & AI</h2>
+    <p class="lead">Essays and field notes from the frontier where finance data meets machine intelligence.</p>
+    <div class="posts">
+      <div class="post reveal"><span class="soon">Coming soon</span><h4>Your Revenue Number Is Probably Wrong</h4><p>Why reconciliation is the most underrated discipline in data engineering — and how leaks hide in plain sight.</p></div>
+      <div class="post reveal"><span class="soon">Coming soon</span><h4>SOX Controls Belong in Your Data Pipeline</h4><p>A practical guide to compliance-as-code on the Lakehouse for engineers who'd rather automate audits than survive them.</p></div>
+      <div class="post reveal"><span class="soon">Coming soon</span><h4>LLMs in the Fraud Stack: What Actually Works</h4><p>Separating AI hype from the triage, explanation, and evidence tasks where language models genuinely earn their keep.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <span class="sec-k">Track Record</span>
+    <h2>Experience</h2>
+    <div class="tl">
+      <div class="tli reveal">
+        <span class="when">JAN 2022 — PRESENT</span>
+        <h3>Senior Manager, Data Assurance & Analytics Engineering — Finance Data</h3>
+        <div class="org">SiriusXM · Washington, DC / New York</div>
+        <p>Own the finance data platform powering GL, AR, payments, and revenue reporting in PCI-regulated environments. Automated 81/88 manual CFO processes, delivered $4M+ annual savings, built collectors reporting for Pandora Media Ads, and lead data & analytics engineering teams — Databricks Lakehouse, Spark, ML models, code review, and CI/CD across AWS, GCP, and Snowflake.</p>
+      </div>
+      <div class="tli reveal">
+        <span class="when">JAN 2019 — JAN 2022</span>
+        <h3>Manager, Data Analytics / Revenue Assurance Audit</h3>
+        <div class="org">SiriusXM · Washington, DC</div>
+        <p>Built automated reconciliation and anomaly-detection models across billing, revenue, and payments — 35% fewer chargebacks, 27% lower processing fees, $11M in fraud prevented. Integrated SOX-compliant pipelines end-to-end with card processors including Chase Paymentech, Global Payments, and Worldpay.</p>
+      </div>
+      <div class="tli reveal">
+        <span class="when">MAY 2010 — AUG 2018</span>
+        <h3>Manager / Head, Revenue Assurance & Fraud</h3>
+        <div class="org">Airtel · Afriwave Telecom · Busy Internet · Ghana</div>
+        <p>Led large-scale billing, interconnect, and payment reconciliations — $6M+ annual savings, $2M+ recovered from under-billing and tax leakage, national interconnect clearing house fraud framework, ISO 27001-supporting governance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <span class="sec-k">Toolkit</span>
+    <h2>Stack & disciplines</h2>
+    <div class="skills">
+      <div class="skill reveal"><h4>Data Engineering & Lakehouse</h4><div class="chips"><span class="chip">Databricks</span><span class="chip">Delta Lake</span><span class="chip">Unity Catalog</span><span class="chip">Delta Live Tables</span><span class="chip">Apache Spark</span><span class="chip">Apache Kafka</span><span class="chip">Apache Flink</span><span class="chip">Apache Iceberg</span><span class="chip">Airflow / Dagster</span><span class="chip">Python</span><span class="chip">Advanced SQL</span></div></div>
+      <div class="skill reveal"><h4>AI, ML & Analytics Platforms</h4><div class="chips"><span class="chip">LLMs</span><span class="chip">Agent frameworks</span><span class="chip">RAG architectures</span><span class="chip">Orchestration patterns</span><span class="chip">AI application development</span><span class="chip">Custom GPTs</span><span class="chip">MLflow</span><span class="chip">ML anomaly detection</span><span class="chip">Predictive modeling</span><span class="chip">Tableau · Looker · Power BI</span><span class="chip">Alteryx</span></div></div>
+      <div class="skill reveal"><h4>Payments & Card Industry</h4><div class="chips"><span class="chip">Chase Paymentech</span><span class="chip">Global Payments</span><span class="chip">Worldpay</span><span class="chip">Card brand rules — Visa · Mastercard · Amex · Discover</span><span class="chip">Interchange & chargeback lifecycle</span><span class="chip">Payment processor APIs</span><span class="chip">Card decline optimization</span><span class="chip">PCI-DSS</span></div></div>
+      <div class="skill reveal"><h4>Governance & Leadership</h4><div class="chips"><span class="chip">SOX / ICFR / COSO</span><span class="chip">SOC 1/2</span><span class="chip">ISO 27001</span><span class="chip">NIST · CoBIT · ITIL</span><span class="chip">Team building</span><span class="chip">Roadmap ownership</span><span class="chip">Facilitation & coaching</span><span class="chip">Technical & exec education</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="credentials">
+  <div class="wrap">
+    <span class="sec-k">Credentials</span>
+    <h2>Education & certifications</h2>
+    <div class="creds">
+      <div class="cred reveal"><div class="t">M.S., Data Analytics</div><div class="s">University of Maryland Global Campus · 2023</div></div>
+      <div class="cred reveal"><div class="t">B.S., Computer Engineering</div><div class="s">University of Ghana · 2008</div></div>
+      <div class="cred reveal"><div class="t">CISA</div><div class="s">Certified Information Systems Auditor · ISACA · 2015</div></div>
+      <div class="cred reveal"><div class="t">McKinsey AMP</div><div class="s">Accelerated Management Program · 2023</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <span class="sec-k">Contact</span>
+      <h2>Let's build trustworthy data systems.</h2>
+      <p>Open to engineering leadership roles, advisory work, and conversations at the intersection of data assurance, advanced analytics, fraud, and AI.</p>
+      <div class="socials">
+        <a class="btn btn-p" href="mailto:blesshotor@gmail.com">blesshotor@gmail.com</a>
+        <a class="btn btn-o" href="https://www.linkedin.com/in/bless-hotor-bsc-cisa-069a1b29/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn btn-o" href="https://github.com/blesshotor/blesshotor" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Bless Hotor · Data Assurance × Advanced Analytics × AI · Washington, DC<br>
+  <a href="https://www.linkedin.com/in/bless-hotor-bsc-cisa-069a1b29/">LinkedIn</a> · <a href="https://github.com/blesshotor/blesshotor">GitHub</a> · <a href="mailto:blesshotor@gmail.com">Email</a></div>
+</footer>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ===== 3D OBSIDIAN KNOWLEDGE MAP =====
+(function(){
+const canvas = document.getElementById('kmap');
+if(!canvas) return;
+const tip = document.getElementById('maptip');
+const ctx = canvas.getContext('2d');
+
+const C = {core:'#39d3bb',data:'#5b8cff',ai:'#a06bff',pay:'#f5c15c',fraud:'#ff6b8b',fin:'#6be0ff',gov:'#9df58c',lead:'#ffa26b'};
+const GN = {core:'Core & Domains',data:'Lakehouse & Data Eng',ai:'AI & ML',pay:'Payments & Cards',fraud:'Fraud & Risk',fin:'Finance Data',gov:'Compliance',lead:'Leadership'};
+
+// [id, label, group, size, note]
+const N = [
+['bless','BLESS HOTOR','core',15,'Data Assurance × Advanced Analytics × AI'],
+['da','Data Assurance','core',10,'Trustworthy-by-construction data platforms'],
+['aa','Advanced Analytics','core',10,'From reconciliation to prediction'],
+['aicore','Applied AI','core',10,'ML + LLMs on regulated data'],
+['payd','Payments','core',10,'Card processing industry depth'],
+['fraudd','Fraud Intelligence','core',10,'$11M+ prevented'],
+['find','Finance Data','core',10,'The CFO’s data platform'],
+['leadd','Leadership','core',10,'Dream-team builder'],
+// data eng
+['dbx','Databricks','data',9,'Vast Lakehouse experience — core platform'],
+['delta','Delta Lake','data',6,'Open table format, ACID on the lake'],
+['uc','Unity Catalog','data',6,'Governance & lineage layer'],
+['dlt','Delta Live Tables','data',6,'Pipelines with quality expectations'],
+['spark','Apache Spark','data',7,'Distributed compute engine'],
+['kafka','Apache Kafka','data',6,'Event streaming'],
+['flink','Apache Flink','data',5,'Stream processing'],
+['ice','Apache Iceberg','data',5,'Cross-engine table format'],
+['air','Airflow / Dagster','data',5,'Orchestration'],
+['snow','Snowflake','data',6,'Cloud warehouse'],
+['bq','BigQuery','data',6,'Cloud warehouse (GCP)'],
+['py','Python','data',7,'Primary language'],
+['sql','Advanced SQL','data',7,'The lingua franca'],
+['aws','AWS · GCP','data',5,'Multi-cloud'],
+// AI
+['mlflow','MLflow','ai',6,'Model lifecycle & tracking'],
+['anom','ML Anomaly Detection','ai',7,'The fraud & reconciliation brain'],
+['fc','Forecasting Models','ai',6,'Within 1% tolerance — $11M save'],
+['llm','LLMs','ai',7,'Deep LLM engineering experience'],
+['rag','RAG Architectures','ai',6,'Retrieval-augmented copilots & evidence Q&A'],
+['agents','Agent Frameworks','ai',6,'Multi-step autonomous AI workflows'],
+['orch','Orchestration Patterns','ai',6,'Chaining, routing, tool use at scale'],
+['aiapp','AI App Development','ai',7,'Enterprise AI solutions, measurable outcomes'],
+['gpt','Custom GPTs','ai',6,'Finance-ops AI assistants'],
+['score','Predictive Fraud Scoring','ai',6,'34% onboarding fraud reduction'],
+// payments
+['jpmc','Chase Paymentech','pay',7,'JP Morgan Chase — end-to-end integration'],
+['gpn','Global Payments','pay',7,'Processor integration & settlement'],
+['wp','Worldpay','pay',7,'Processor integration & recon'],
+['brands','Card Brand Rules','pay',6,'Visa · Mastercard · Amex · Discover'],
+['ichg','Interchange','pay',5,'Fee & margin economics'],
+['cb','Chargeback Lifecycle','pay',6,'35% reduction via automation'],
+['pci','PCI-DSS','pay',6,'Regulated card-data environments'],
+['decline','Decline Optimization','pay',5,'18% fewer declines at billing'],
+// fraud
+['onb','Onboarding Fraud','fraud',6,'34% reduction via predictive models'],
+['aml','AML & Transaction Monitoring','fraud',6,'Governed fraud data models'],
+['gw','Gateway / Interconnect Fraud','fraud',6,'National clearing house framework'],
+['leak','Revenue Leakage','fraud',6,'$2M+ recovered'],
+// finance
+['gl','GL & AR','fin',6,'Reconciliation at scale'],
+['revrec','Revenue Recognition','fin',7,'Unified, compliant rev-rec layer'],
+['i2b','Invoicing-to-Billing','fin',6,'End-to-end pipelines'],
+['close','Month-End Close','fin',6,'Faster, controlled, audit-ready'],
+['pandora','Pandora Media Ads','fin',7,'Collectors reporting — ads receivables'],
+['jrnl','Journal Automation','fin',5,'Data for journal entry prep'],
+// governance
+['sox','SOX / ICFR / COSO','gov',7,'Controls embedded in pipelines'],
+['cisa','CISA','gov',7,'Certified Information Systems Auditor'],
+['soc','SOC 1 / SOC 2','gov',5,'Evidence-ready pipelines'],
+['iso','ISO 27001','gov',5,'Certification-supporting governance'],
+['contracts','Data Contracts','gov',6,'Accounting policy → durable models'],
+['lineage','Lineage & Quality','gov',6,'End-to-end, audit-trusted'],
+// leadership
+['team','Dream-Team Builder','lead',7,'Hire, grow, retain top engineers'],
+['xfn','Cross-Functional Ambassador','lead',6,'Accounting · FP&A · Treasury · Audit'],
+['road','Roadmap Ownership','lead',5,'92% CFO process automation program'],
+['mck','McKinsey AMP','lead',5,'Accelerated Management Program'],
+['coach','Facilitation & Coaching','lead',6,'Educating technical & non-technical audiences'],
+];
+
+const L = [
+['bless','da'],['bless','aa'],['bless','aicore'],['bless','payd'],['bless','fraudd'],['bless','find'],['bless','leadd'],
+['da','dbx'],['da','uc'],['da','lineage'],['da','contracts'],['da','sox'],
+['dbx','delta'],['dbx','uc'],['dbx','dlt'],['dbx','spark'],['dbx','mlflow'],['delta','ice'],
+['aa','spark'],['aa','py'],['aa','sql'],['aa','snow'],['aa','bq'],['aa','fc'],
+['da','kafka'],['kafka','flink'],['da','air'],['da','aws'],
+['aicore','mlflow'],['aicore','anom'],['aicore','fc'],['aicore','llm'],['aicore','gpt'],['aicore','score'],
+['anom','fraudd'],['score','onb'],['fc','leak'],['llm','gpt'],['llm','rag'],['llm','agents'],['agents','orch'],['aicore','rag'],['aicore','agents'],['aicore','orch'],['aicore','aiapp'],['aiapp','gpt'],['rag','aiapp'],
+['payd','jpmc'],['payd','gpn'],['payd','wp'],['payd','brands'],['payd','ichg'],['payd','cb'],['payd','pci'],['payd','decline'],
+['brands','ichg'],['cb','decline'],['pci','sox'],
+['fraudd','onb'],['fraudd','aml'],['fraudd','gw'],['fraudd','leak'],['fraudd','cb'],
+['find','gl'],['find','revrec'],['find','i2b'],['find','close'],['find','pandora'],['find','jrnl'],
+['revrec','i2b'],['i2b','jpmc'],['i2b','gpn'],['i2b','wp'],['pandora','revrec'],['close','jrnl'],
+['gov1?','x'] // placeholder removed below
+];
+L.pop();
+L.push(['sox','close'],['sox','soc'],['cisa','sox'],['cisa','iso'],['contracts','revrec'],['lineage','close'],
+['leadd','team'],['leadd','xfn'],['leadd','road'],['leadd','mck'],['leadd','coach'],['coach','aiapp'],['xfn','contracts'],['road','close'],
+['gl','close'],['aml','pci'],['gw','leak'],['dlt','lineage']);
+
+const nodes = N.map(n=>({id:n[0],label:n[1],g:n[2],s:n[3],note:n[4],
+  x:(Math.random()-.5)*600,y:(Math.random()-.5)*600,z:(Math.random()-.5)*600,vx:0,vy:0,vz:0}));
+const byId = {}; nodes.forEach(n=>byId[n.id]=n);
+const links = L.filter(l=>byId[l[0]]&&byId[l[1]]).map(l=>({a:byId[l[0]],b:byId[l[1]]}));
+const adj = {}; nodes.forEach(n=>adj[n.id]=new Set());
+links.forEach(l=>{adj[l.a.id].add(l.b.id);adj[l.b.id].add(l.a.id);});
+
+// --- force simulation (precomputed) ---
+for(let it=0; it<320; it++){
+  const k = it<40?0.9:0.5;
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i],b=nodes[j];
+    let dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z;
+    let d2=dx*dx+dy*dy+dz*dz+0.01, d=Math.sqrt(d2);
+    const rep=9000/d2;
+    dx/=d;dy/=d;dz/=d;
+    a.vx-=dx*rep*k;a.vy-=dy*rep*k;a.vz-=dz*rep*k;
+    b.vx+=dx*rep*k;b.vy+=dy*rep*k;b.vz+=dz*rep*k;
+  }
+  links.forEach(l=>{
+    let dx=l.b.x-l.a.x,dy=l.b.y-l.a.y,dz=l.b.z-l.a.z;
+    const d=Math.sqrt(dx*dx+dy*dy+dz*dz)+0.01;
+    const want=l.a.g==='core'&&l.b.g==='core'?150:95;
+    const f=(d-want)*0.02*k;
+    dx/=d;dy/=d;dz/=d;
+    l.a.vx+=dx*f;l.a.vy+=dy*f;l.a.vz+=dz*f;
+    l.b.vx-=dx*f;l.b.vy-=dy*f;l.b.vz-=dz*f;
+  });
+  nodes.forEach(n=>{
+    n.vx-=n.x*0.004;n.vy-=n.y*0.004;n.vz-=n.z*0.004; // centering
+    n.x+=n.vx;n.y+=n.vy;n.z+=n.vz;
+    n.vx*=0.82;n.vy*=0.82;n.vz*=0.82;
+  });
+}
+byId.bless.x=0;byId.bless.y=0;byId.bless.z=0;
+
+// --- render ---
+let yaw=0.4, pitch=0.25, zoom=1, auto=true, hovered=null;
+let W,H,DPR;
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=canvas.clientWidth;H=canvas.clientHeight;
+  canvas.width=W*DPR;canvas.height=H*DPR;
+}
+resize(); addEventListener('resize',resize);
+
+function project(n){
+  const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+  let x=n.x*cy+n.z*sy, z=-n.x*sy+n.z*cy;
+  let y=n.y*cp-z*sp;  z=n.y*sp+z*cp;
+  const f=900, s=f/(f+z)*zoom;
+  return {sx:W/2+x*s, sy:H/2+y*s, s, z};
+}
+
+function draw(){
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.clearRect(0,0,W,H);
+  if(auto) yaw+=0.0022;
+  const P={}; nodes.forEach(n=>P[n.id]=project(n));
+  const hl = hovered? adj[hovered.id] : null;
+
+  // links
+  links.forEach(l=>{
+    const a=P[l.a.id],b=P[l.b.id];
+    const active = hovered && (l.a===hovered||l.b===hovered);
+    const dim = hovered && !active;
+    const depth=Math.max(0.15,Math.min(1,(a.s+b.s)/2/zoom));
+    ctx.strokeStyle = active? 'rgba(57,211,187,'+(0.85*depth)+')' : 'rgba(120,140,200,'+((dim?0.05:0.16)*depth)+')';
+    ctx.lineWidth = active?1.6:0.7;
+    ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();
+  });
+
+  // nodes (far → near)
+  const order=[...nodes].sort((a,b)=>P[b.id].z-P[a.id].z);
+  order.forEach(n=>{
+    const p=P[n.id];
+    const r=(n.s*0.9+2)*p.s;
+    const isH=hovered===n, isN=hl&&hl.has(n.id);
+    const dim=hovered&&!isH&&!isN;
+    ctx.globalAlpha=dim?0.18:Math.max(0.35,Math.min(1,p.s));
+    ctx.shadowColor=C[n.g]; ctx.shadowBlur=isH?26:(isN?18:10)*p.s;
+    ctx.fillStyle=C[n.g];
+    ctx.beginPath();ctx.arc(p.sx,p.sy,Math.max(1.5,r),0,7);ctx.fill();
+    ctx.shadowBlur=0;
+    if(n.s>=9||isH||isN||(n.s>=7&&p.s>0.9&&!hovered)){
+      ctx.font=(n.g==='core'?'700 ':'400 ')+Math.max(9,11*p.s)+'px Segoe UI,system-ui,sans-serif';
+      ctx.fillStyle=dim?'rgba(180,190,220,.2)':(isH?'#fff':'rgba(210,220,245,.85)');
+      ctx.textAlign='center';
+      ctx.fillText(n.label,p.sx,p.sy-r-6*p.s);
+    }
+    ctx.globalAlpha=1;
+  });
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+// --- interaction ---
+let drag=false,lx=0,ly=0,moved=0;
+const pos=e=>{const r=canvas.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};};
+canvas.addEventListener('pointerdown',e=>{drag=true;moved=0;lx=e.clientX;ly=e.clientY;canvas.classList.add('dragging');auto=false;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',e=>{
+  if(drag){
+    yaw+=(e.clientX-lx)*0.005; pitch+=(e.clientY-ly)*0.005;
+    pitch=Math.max(-1.3,Math.min(1.3,pitch));
+    moved+=Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly);
+    lx=e.clientX;ly=e.clientY;
+  } else {
+    const m=pos(e); hovered=null;
+    let best=18;
+    nodes.forEach(n=>{const p=project(n);const d=Math.hypot(p.sx-m.x,p.sy-m.y);if(d<best){best=d;hovered=n;}});
+    if(hovered){
+      tip.innerHTML='<span class="g">'+GN[hovered.g]+'</span><b>'+hovered.label+'</b><br>'+hovered.note;
+      tip.style.opacity=1;
+      tip.style.left=Math.min(m.x+16,W-260)+'px';
+      tip.style.top=(m.y+14)+'px';
+      canvas.style.cursor='pointer';
+    } else { tip.style.opacity=0; canvas.style.cursor='grab'; }
+  }
+});
+canvas.addEventListener('pointerup',()=>{drag=false;canvas.classList.remove('dragging');setTimeout(()=>{if(!drag)auto=true;},2600);});
+canvas.addEventListener('pointerleave',()=>{hovered=null;tip.style.opacity=0;});
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(0.45,Math.min(2.6,zoom*(e.deltaY<0?1.09:0.92)));},{passive:false});
+})();
+
+// Stat counters
+const fmt = (v, sfx) => (sfx === 'M+' ? '$' + v + 'M+' : sfx === '/88' ? v + '/88' : sfx === '+' ? v.toLocaleString() + '+' : v + sfx);
+const so = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const el = e.target, end = +el.dataset.count, sfx = el.dataset.suffix, t0 = performance.now();
+  const step = t => { const p = Math.min((t - t0) / 1200, 1); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - p, 3))), sfx); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step); so.unobserve(el);
+}), { threshold: .5 });
+document.querySelectorAll('.stat .n').forEach(el => so.observe(el));
+</script>
+</body>
+</html>
