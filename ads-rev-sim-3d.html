@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ads Revenue Pipeline — Interactive 3D | Bless Hotor</title>
+<meta name="description" content="Interactive 3D map of how streaming-ads money flows: impressions → delivery validation → ASC 606 revenue recognition → invoicing → DSP report exchange → collections → GL.">
+<style>
+  :root{--bg:#07090f;--card:#10162a;--line:#1e2947;--txt:#e8ecf7;--muted:#8b96b8;
+        --teal:#39d3bb;--blue:#5b8cff;--purple:#a06bff;--gold:#f5c15c;--pink:#ff6b8b;--green:#9df58c}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+  header{padding:26px 24px 10px;max-width:1150px;margin:0 auto}
+  h1{font-size:1.6rem;letter-spacing:-.5px}
+  h1 span{background:linear-gradient(100deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:.92rem;margin-top:6px;max-width:820px}
+  .sub a{color:var(--teal);text-decoration:none}
+  .stage-wrap{max-width:1150px;margin:14px auto 40px;padding:0 24px}
+  .box{position:relative;background:radial-gradient(700px 320px at 50% 0%,rgba(245,193,92,.07),transparent 60%),linear-gradient(170deg,#0a0e1c,#070a13);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+  #g{display:block;width:100%;height:640px;cursor:grab;touch-action:none}
+  #g.drag{cursor:grabbing}
+  .hint{position:absolute;top:14px;right:16px;font-size:.72rem;color:var(--muted);background:rgba(7,9,15,.6);border:1px solid var(--line);border-radius:99px;padding:5px 14px}
+  .panel{position:absolute;left:16px;bottom:16px;width:330px;max-width:calc(100% - 32px);background:rgba(10,14,28,.95);border:1px solid var(--teal);border-radius:14px;padding:16px 18px;display:none}
+  .panel .k{font-size:.66rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+  .panel h3{font-size:1.02rem;margin:3px 0 7px}
+  .panel p{font-size:.83rem;color:#b9c3de;line-height:1.5}
+  .panel .m{margin-top:9px;font-size:.78rem;color:var(--gold)}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 18px;padding:14px 20px;border-top:1px solid var(--line);background:rgba(7,9,15,.5)}
+  .lg{display:inline-flex;align-items:center;gap:7px;font-size:.75rem;color:var(--muted)}
+  .lg i{width:10px;height:10px;border-radius:50%}
+  footer{max-width:1150px;margin:0 auto;padding:0 24px 42px;color:var(--muted);font-size:.8rem}
+  footer a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>📺 <span>Ads Revenue Pipeline</span> — how streaming-ads money actually flows</h1>
+  <p class="sub">An interactive 3D map of the ads-finance lifecycle behind the
+  <a href="https://github.com/blesshotor/ads-rev-sim">Ads Revenue Recognition Simulator</a>.
+  Watch impressions become recognized revenue: drag to rotate · scroll to zoom ·
+  <b>click any node</b> for what happens at that stage. The moving pulses are the money.</p>
+</header>
+
+<div class="stage-wrap">
+  <div class="box">
+    <canvas id="g"></canvas>
+    <div class="hint">🖱 drag · scroll · click a node</div>
+    <div class="panel" id="panel">
+      <span class="k" id="pk"></span><h3 id="pt"></h3><p id="pd"></p><div class="m" id="pm"></div>
+    </div>
+    <div class="legend">
+      <span class="lg"><i style="background:#5b8cff"></i> Delivery & validation</span>
+      <span class="lg"><i style="background:#a06bff"></i> Contract & rev rec</span>
+      <span class="lg"><i style="background:#f5c15c"></i> Billing & exchange</span>
+      <span class="lg"><i style="background:#9df58c"></i> Cash & ledger</span>
+      <span class="lg"><i style="background:#ff6b8b"></i> Exceptions</span>
+    </div>
+  </div>
+</div>
+
+<footer>Built by <a href="https://blesshotor.github.io">Bless Hotor</a> — informed by building
+collectors reporting for Pandora Media Ads (SiriusXM Media) ·
+<a href="https://github.com/blesshotor/ads-rev-sim">Run the simulator →</a></footer>
+
+<script>
+const canvas=document.getElementById('g'),ctx=canvas.getContext('2d');
+const panel=document.getElementById('panel');
+const C={del:'#5b8cff',rev:'#a06bff',bill:'#f5c15c',cash:'#9df58c',exc:'#ff6b8b'};
+const GN={del:'Delivery & validation',rev:'Contract & rev rec',bill:'Billing & exchange',cash:'Cash & ledger',exc:'Exceptions'};
+
+// [id,label,group,size,x-slot,desc,metric]
+const N=[
+['adserver','Ad Server',        'del',11,0,'Client + server-side ad insertion decides which ad plays in each stream break, then fires delivery beacons.','Simulator: 24 IOs · 3 DSPs · ~2,200 daily delivery rows'],
+['logs','Impression Logs',      'del',9, 1,'Raw beacons land as daily delivery logs — gross impressions per insertion order per day.','~57M gross impressions / quarter'],
+['ivt','IVT Filtering',         'del',9, 2,'Invalid-traffic (bots, spoofing) and viewability screens decide what is billable. Only measurable, viewable, human impressions count.','~1.6% filtered; planted bot spike hits 10.8% on one IO'],
+['io','Insertion Order',        'rev',10,2,'The contract: advertiser, DSP, flight dates, contracted impressions, CPM, and whose counts are the billing source (server vs DSP).','Contract terms drive everything downstream'],
+['revrec','Revenue Recognition','rev',12,3,'ASC 606 output method: revenue is recognized as impressions deliver — never beyond contract. Over-delivery is capped; it is delivery, not revenue.','$996K recognized · $30K over-delivery capped'],
+['makegood','Makegoods',        'exc',8, 3,'Flights under ~95% delivered create makegood liabilities — free future delivery owed to the advertiser, booked as a liability, not revenue.','$19K liability on 2 under-delivered flights'],
+['invoice','Invoicing',         'bill',11,4,'Monthly invoices per IO, billed from the contractual source of truth — server counts or DSP counts. Difference vs recognized = unbilled revenue (timing).','72 invoices · $993K billed · $3.7K unbilled'],
+['dspx','DSP Report Exchange',  'bill',10,5,'Counts are swapped with each DSP monthly. Discrepancies within ~5% are industry-normal; beyond that triggers reconciliation and credit memos.','1 IO breaches tolerance at 8.0% (planted)'],
+['disc','Discrepancy Recon',    'exc',8, 5,'Server-vs-DSP gaps get investigated: tracking loss, latency, spec mismatches. Findings feed credit memos and next month\\u2019s billing.','Discrepancy report per DSP, per IO'],
+['collections','Collections / AR','cash',10,6,'Invoices age through AR. Collectors reporting gives finance visibility into advertising receivables and billing-to-cash performance — the exact reporting built for Pandora Media Ads.','DSO, aging buckets, promise-to-pay tracking'],
+['gl','General Ledger',         'cash',10,7,'Recognized revenue, unbilled AR, deferred revenue and makegood liabilities post to the GL — reconciled, SOX-controlled, audit-ready.','Three-way match: delivered vs billed vs booked'],
+['audit','Audit Evidence',      'cash',8, 7,'Every stage leaves evidence: validation logs, rev-rec schedules, invoice registers, discrepancy files — the month-end ads close pack.','close_pack.html generated each run'],
+];
+const L=[['adserver','logs'],['logs','ivt'],['ivt','revrec'],['io','revrec'],['io','invoice'],
+['revrec','makegood'],['revrec','invoice'],['invoice','dspx'],['dspx','disc'],['disc','invoice'],
+['invoice','collections'],['collections','gl'],['revrec','gl'],['makegood','gl'],['gl','audit'],['dspx','audit']];
+// money path for pulses
+const FLOW=[['adserver','logs'],['logs','ivt'],['ivt','revrec'],['revrec','invoice'],['invoice','dspx'],['invoice','collections'],['collections','gl'],['gl','audit']];
+
+const nodes=N.map(n=>({id:n[0],label:n[1],g:n[2],s:n[3],slot:n[4],desc:n[5],metric:n[6],
+  x:(n[4]-3.5)*150+(Math.random()-.5)*30, y:(Math.random()-.5)*180, z:(Math.random()-.5)*180}));
+const byId={};nodes.forEach(n=>byId[n.id]=n);
+const links=L.map(l=>({a:byId[l[0]],b:byId[l[1]]}));
+// gentle physics to spread y/z while keeping x slots
+for(let it=0;it<220;it++){
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i],b=nodes[j];let dy=b.y-a.y,dz=b.z-a.z;
+    let d2=dy*dy+dz*dz+.01,d=Math.sqrt(d2),rep=2600/d2;
+    dy/=d;dz/=d;a.y-=dy*rep*.5;a.z-=dz*rep*.5;b.y+=dy*rep*.5;b.z+=dz*rep*.5;}
+  nodes.forEach(n=>{n.y*=0.985;n.z*=0.985;});
+}
+const pulses=FLOW.map((f,i)=>({a:byId[f[0]],b:byId[f[1]],t:i/FLOW.length}));
+
+let yaw=.35,pitch=.22,zoom=1,auto=true,hovered=null,selected=null,W,H,DPR;
+function resize(){DPR=Math.min(devicePixelRatio||1,2);W=canvas.clientWidth;H=canvas.clientHeight;
+  canvas.width=W*DPR;canvas.height=H*DPR;}
+resize();addEventListener('resize',resize);
+function project(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+  let x=p.x*cy+p.z*sy,z=-p.x*sy+p.z*cy,y=p.y*cp-z*sp;z=p.y*sp+z*cp;
+  const s=900/(900+z)*zoom;return{sx:W/2+x*s,sy:H/2+y*s,s,z};}
+
+function draw(ts){
+  ctx.setTransform(DPR,0,0,DPR,0,0);ctx.clearRect(0,0,W,H);
+  if(auto)yaw+=.0018;
+  const P={};nodes.forEach(n=>P[n.id]=project(n));
+  const focus=selected||hovered;
+  links.forEach(l=>{
+    const a=P[l.a.id],b=P[l.b.id];
+    const active=focus&&(l.a===focus||l.b===focus);
+    ctx.strokeStyle=active?'rgba(57,211,187,.85)':'rgba(120,140,200,'+(focus?'.06':'.18')+')';
+    ctx.lineWidth=active?1.8:0.8;
+    ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();});
+  // money pulses
+  pulses.forEach(p=>{
+    p.t=(p.t+.004)%1;
+    const a=P[p.a.id],b=P[p.b.id];
+    const x=a.sx+(b.sx-a.sx)*p.t,y=a.sy+(b.sy-a.sy)*p.t;
+    ctx.globalAlpha=focus?0.25:0.95;
+    ctx.shadowColor='#f5c15c';ctx.shadowBlur=12;
+    ctx.fillStyle='#f5c15c';
+    ctx.beginPath();ctx.arc(x,y,2.6,0,7);ctx.fill();
+    ctx.shadowBlur=0;ctx.globalAlpha=1;});
+  const order=[...nodes].sort((a,b)=>P[b.id].z-P[a.id].z);
+  order.forEach(n=>{
+    const p=P[n.id],r=(n.s*.85+2)*p.s;
+    const isF=focus===n,dim=focus&&!isF&&!links.some(l=>(l.a===focus&&l.b===n)||(l.b===focus&&l.a===n));
+    ctx.globalAlpha=dim?0.18:1;
+    ctx.shadowColor=C[n.g];ctx.shadowBlur=(isF?26:12)*p.s;
+    ctx.fillStyle=C[n.g];
+    ctx.beginPath();ctx.arc(p.sx,p.sy,Math.max(2,r),0,7);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.font=(n.s>=10?'700 ':'400 ')+Math.max(9,11.5*p.s)+'px Segoe UI,system-ui,sans-serif';
+    ctx.fillStyle=dim?'rgba(180,190,220,.25)':(isF?'#fff':'rgba(215,225,248,.9)');
+    ctx.textAlign='center';
+    ctx.fillText(n.label,p.sx,p.sy-r-7*p.s);
+    ctx.globalAlpha=1;});
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+let drag=false,lx=0,ly=0,moved=0;
+canvas.addEventListener('pointerdown',e=>{drag=true;moved=0;lx=e.clientX;ly=e.clientY;
+  canvas.classList.add('drag');auto=false;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',e=>{
+  const r=canvas.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+  if(drag){yaw+=(e.clientX-lx)*.005;pitch=Math.max(-1.2,Math.min(1.2,pitch+(e.clientY-ly)*.005));
+    moved+=Math.abs(e.clientX-lx)+Math.abs(e.clientY-ly);lx=e.clientX;ly=e.clientY;return;}
+  hovered=null;let best=20;
+  nodes.forEach(n=>{const p=project(n);const d=Math.hypot(p.sx-mx,p.sy-my);
+    if(d<best){best=d;hovered=n;}});
+  canvas.style.cursor=hovered?'pointer':'grab';});
+canvas.addEventListener('pointerup',e=>{
+  drag=false;canvas.classList.remove('drag');
+  if(moved<6){ // click
+    if(hovered){selected=hovered;
+      document.getElementById('pk').textContent=GN[selected.g];
+      document.getElementById('pt').textContent=selected.label;
+      document.getElementById('pd').textContent=selected.desc;
+      document.getElementById('pm').textContent=selected.metric;
+      panel.style.display='block';panel.style.borderColor=C[selected.g];}
+    else{selected=null;panel.style.display='none';}}
+  setTimeout(()=>{if(!drag)auto=true;},2400);});
+canvas.addEventListener('pointerleave',()=>{hovered=null;});
+canvas.addEventListener('wheel',e=>{e.preventDefault();
+  zoom=Math.max(.5,Math.min(2.6,zoom*(e.deltaY<0?1.09:.92)));},{passive:false});
+</script>
+</body>
+</html>
